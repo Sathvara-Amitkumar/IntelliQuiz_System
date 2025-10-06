@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - IntelliQuiz</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-box">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span class="logo-text">IntelliQuiz</span>
+            </div>
+            <h2 class="admin-title">Admin Login</h2>
+            <p class="admin-subtitle">Access the management dashboard.</p>
+            <form class="modal-form" id="admin-login-form">
+                <div class="form-group">
+                    <label for="admin-email">Email Address</label>
+                    <input type="email" id="admin-email" placeholder="admin@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" placeholder="••••••••" required>
+                </div>
+                <p class="form-message"></p>
+                <button type="submit" class="btn btn-primary btn-full">Log In</button>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="/src/auth.js"></script>
+</body>
+</html>
