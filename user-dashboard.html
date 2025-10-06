@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - IntelliQuiz</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/user-dashboard.css">
+</head>
+<body>
+    <nav class="navbar dashboard-nav">
+        <div class="container nav-container">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span class="logo-text">IntelliQuiz</span>
+            </div>
+            <div class="nav-actions">
+                <span class="user-name" id="userName">Loading...</span>
+                <button class="btn btn-outline" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Welcome Back!</h1>
+                <p class="dashboard-subtitle">Ready to test your knowledge?</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card join-quiz-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                <polyline points="10 17 15 12 10 7"/>
+                                <line x1="15" y1="12" x2="3" y2="12"/>
+                            </svg>
+                        </div>
+                        <h2 class="card-title">Join a Quiz</h2>
+                    </div>
+                    <p class="card-description">Enter the quiz ID and password provided by your instructor</p>
+                    <form class="join-quiz-form" id="joinQuizForm">
+                        <div class="form-group">
+                            <label for="quizId">Quiz ID</label>
+                            <input type="text" id="quizId" placeholder="Enter Quiz ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quizPassword">Quiz Password</label>
+                            <input type="password" id="quizPassword" placeholder="Enter Password" required>
+                        </div>
+                        <p class="form-message"></p>
+                        <button type="submit" class="btn btn-primary btn-full">Start Quiz</button>
+                    </form>
+                </div>
+
+                <div class="dashboard-card stats-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <h2 class="card-title">My Statistics</h2>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalQuizzes">0</div>
+                            <div class="stat-label">Total Quizzes</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="averageScore">0%</div>
+                            <div class="stat-label">Average Score</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="bestScore">0%</div>
+                            <div class="stat-label">Best Score</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalTime">0h</div>
+                            <div class="stat-label">Time Spent</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card recent-activity-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <h2 class="card-title">Recent Activity</h2>
+                    </div>
+                    <div class="activity-list" id="activityList">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <p>No activity yet. Join a quiz to get started!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card quiz-history-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                        </div>
+                        <h2 class="card-title">Quiz History</h2>
+                    </div>
+                    <div class="quiz-history-list" id="quizHistoryList">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <p>No quiz history yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/src/user-dashboard.js"></script>
+</body>
+</html>
