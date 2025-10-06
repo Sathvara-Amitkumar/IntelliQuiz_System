@@ -71,43 +71,50 @@ const handlePrev = () => {
     }
 };
 
-const handleGenerateQuestions = async () => {
+const GEMINI_API_KEY = "AIzaSyAU61AskQX4VWiggm7a-82iucGWolXLVmY";
+
+document.getElementById('generate-questions-btn').addEventListener('click', async () => {
     const prompt = document.getElementById('quiz-prompt').value;
     const totalQuestions = document.getElementById('total-questions').value;
+    const reviewContainer = document.getElementById('question-review-container');
+    reviewContainer.innerHTML = '<div class="loading-state">Generating questions...</div>';
 
-    if (!prompt.trim()) {
-        showToast('Please enter a prompt for the quiz.');
-        return;
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Generate ${totalQuestions} quiz questions with 4 options and answers. Description: ${prompt}`
+                        }]
+                    }]
+                })
+            }
+        );
+        const data = await response.json();
+
+        // Debug: Show raw API response if needed
+        // reviewContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+        // Check for errors
+        if (data.error) {
+            reviewContainer.innerHTML = `<div class="error-state">Error: ${data.error.message}</div>`;
+            return;
+        }
+
+        // Try to extract the generated text
+        let questionsText =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+            "No questions generated. Please try again with a different prompt.";
+
+        reviewContainer.innerHTML = `<pre>${questionsText}</pre>`;
+    } catch (err) {
+        reviewContainer.innerHTML = `<div class="error-state">Failed to generate questions. Please check your network and try again.</div>`;
     }
-
-    generateQuestionsBtn.disabled = true;
-    generateQuestionsBtn.textContent = 'Generating...';
-    questionReviewContainer.innerHTML = '<div class="loading-state">Generating questions... Please wait. This may take a moment.</div>';
-    
-    // Call the secure Supabase Edge Function
-    const { data, error } = await supabase.functions.invoke('generate-quiz', {
-        body: { prompt, totalQuestions: parseInt(totalQuestions) },
-    });
-
-    generateQuestionsBtn.disabled = false;
-    generateQuestionsBtn.textContent = 'Generate Questions';
-
-    if (error) {
-        showToast(`AI Generation Error: ${error.message}`);
-        questionReviewContainer.innerHTML = `<div class="loading-state error">Failed to generate questions. Please check the function logs in your Supabase dashboard.</div>`;
-        return;
-    }
-
-    if (!data.questions || data.questions.length === 0) {
-        showToast('The AI could not generate questions from your prompt. Please try a different prompt.');
-        questionReviewContainer.innerHTML = `<div class="loading-state">No questions were generated.</div>`;
-        return;
-    }
-
-    generatedQuestions = data.questions;
-    renderReviewQuestions();
-    showToast('Questions generated successfully! You can now review them.');
-};
+});
 
 const renderReviewQuestions = () => {
     questionReviewContainer.innerHTML = generatedQuestions.map((q, index) => `
@@ -203,7 +210,48 @@ const handleSaveQuiz = async (e) => {
 nextBtn.addEventListener('click', handleNext);
 prevBtn.addEventListener('click', handlePrev);
 form.addEventListener('submit', handleSaveQuiz);
-generateQuestionsBtn.addEventListener('click', handleGenerateQuestions);
+generateQuestionsBtn.addEventListener('click', async () => {
+    const prompt = document.getElementById('quiz-prompt').value;
+    const totalQuestions = document.getElementById('total-questions').value;
+    const reviewContainer = document.getElementById('question-review-container');
+    reviewContainer.innerHTML = '<div class="loading-state">Generating questions...</div>';
+
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Generate ${totalQuestions} quiz questions with 4 options and answers. Description: ${prompt}`
+                        }]
+                    }]
+                })
+            }
+        );
+        const data = await response.json();
+
+        // Debug: Show raw API response if needed
+        // reviewContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+        // Check for errors
+        if (data.error) {
+            reviewContainer.innerHTML = `<div class="error-state">Error: ${data.error.message}</div>`;
+            return;
+        }
+
+        // Try to extract the generated text
+        let questionsText =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+            "No questions generated. Please try again with a different prompt.";
+
+        reviewContainer.innerHTML = `<pre>${questionsText}</pre>`;
+    } catch (err) {
+        reviewContainer.innerHTML = `<div class="error-state">Failed to generate questions. Please check your network and try again.</div>`;
+    }
+});
 
 // Initial state
 updateFormState();

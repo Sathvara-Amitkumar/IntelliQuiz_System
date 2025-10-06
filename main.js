@@ -7,7 +7,6 @@ const updateNavUI = (user) => {
     if (!navActions) return;
 
     if (user) {
-        // Hardcoded check for admin email
         if (user.email === 'admin@intelliquiz.com') {
             navActions.innerHTML = `
                 <a href="/dashboard.html" class="btn btn-outline">Dashboard</a>
@@ -17,9 +16,8 @@ const updateNavUI = (user) => {
                 await supabase.auth.signOut();
             });
         } else {
-             // Regular user is logged in
             navActions.innerHTML = `
-                <a href="/profile.html" class="btn btn-outline">My Account</a>
+                <a href="/user-dashboard.html" class="btn btn-outline">My Dashboard</a>
                 <button class="btn btn-primary" id="logoutBtnMain">Logout</button>
             `;
              document.getElementById('logoutBtnMain')?.addEventListener('click', async () => {
@@ -27,12 +25,10 @@ const updateNavUI = (user) => {
             });
         }
     } else {
-        // User is logged out
         navActions.innerHTML = `
             <button class="btn btn-outline" id="loginBtn">Login</button>
             <button class="btn btn-primary" id="signupBtnNav">Get Started</button>
         `;
-        // Re-attach event listeners for login/signup
         document.getElementById('loginBtn')?.addEventListener('click', () => openModal(loginModal));
         document.getElementById('signupBtnNav')?.addEventListener('click', () => openModal(signupModal));
     }
@@ -275,13 +271,23 @@ const handleAuthSubmit = async (form, isSignUp) => {
             messageEl.textContent = 'User with this email already exists.';
             messageEl.classList.add('error');
         } else if (isSignUp) {
-            messageEl.textContent = 'Success! Please check your email for a verification link.';
+            messageEl.textContent = 'Account created successfully! Redirecting...';
             messageEl.classList.add('success');
-            setTimeout(closeModal, 3000);
+            setTimeout(() => {
+                closeModal();
+                window.location.href = '/user-dashboard.html';
+            }, 1000);
         } else {
             messageEl.textContent = 'Login successful! Welcome back.';
             messageEl.classList.add('success');
-            setTimeout(closeModal, 2000);
+            setTimeout(() => {
+                closeModal();
+                if (data.user.email === 'admin@intelliquiz.com') {
+                    window.location.href = '/dashboard.html';
+                } else {
+                    window.location.href = '/user-dashboard.html';
+                }
+            }, 1000);
         }
     }
 
